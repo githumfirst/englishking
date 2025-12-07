@@ -61,7 +61,7 @@ async function insertRowToSupabase(appRow) {
     en_text: appRow.en ?? "",
     history: Array.isArray(appRow.history) ? appRow.history : [],
     count: appRow.count ?? 0,
-    review_day: appRow.reviewDay ?? "",
+    review_day: appRow.reviewDay ? appRow.reviewDay : null,
   };
 
   // id는 DB가 생성하도록 두고, 생성된 uuid를 다시 받아서 앱 row.id에 넣을 것
@@ -722,5 +722,6 @@ supa.auth.onAuthStateChange(() => {
 initFromSession();
 
 });
+
 
 
