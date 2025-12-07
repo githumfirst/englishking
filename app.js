@@ -5,6 +5,133 @@ const SUPABASE_ANON_KEY = "sb_publishable_jT7s93y7wDUTvPj3VCGsyA_9exhREW7";
 // supabase-js v2
 const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+/* -----------------------
+   Supabase <-> rows sync
+------------------------ */
+
+// 로그인 유저 가져오기
+async function getAuthedUser() {
+  const { data, error } = await supa.auth.getUser();
+  if (error) {
+    console.error("getUser error:", error);
+    return null;
+  }
+  return data.user ?? null;
+}
+
+// DB에서 내 rows 불러오기
+async function loadRowsFromSupabase() {
+  const user = await getAuthedUser();
+  if (!user) return null;
+
+  const { data, error } = await supa
+    .from("sentences")
+    .select("id, user_id, no, ko_text, en_text, history, count, review_day, created_at")
+    .order("no", { ascending: true });
+
+  if (error) {
+    console.error("loadRowsFromSupabase error:", error);
+    return null;
+  }
+
+  // DB row -> 앱 row 형태로 변환
+  const rows = (data ?? []).map((r) => ({
+    // 앱이 쓰는 id는 row 식별자. 여기서는 DB의 uuid(id)를 그대로 사용
+    id: r.id,
+    no: r.no ?? 0,
+    ko: r.ko_text ?? "",
+    en: r.en_text ?? "",
+    history: Array.isArray(r.history) ? r.history : [],
+    count: r.count ?? 0,
+    reviewDay: r.review_day ?? "",
+  }));
+
+  return rows;
+}
+
+// DB에 새 row 삽입
+async function insertRowToSupabase(appRow) {
+  const user = await getAuthedUser();
+  if (!user) throw new Error("로그인이 필요합니다.");
+
+  const payload = {
+    user_id: user.id,
+    no: appRow.no,
+    ko_text: appRow.ko ?? "",
+    en_text: appRow.en ?? "",
+    history: Array.isArray(appRow.history) ? appRow.history : [],
+    count: appRow.count ?? 0,
+    review_day: appRow.reviewDay ?? "",
+  };
+
+  // id는 DB가 생성하도록 두고, 생성된 uuid를 다시 받아서 앱 row.id에 넣을 것
+  const { data, error } = await supa
+    .from("sentences")
+    .insert(payload)
+    .select("id")
+    .single();
+
+  if (error) throw error;
+  return data.id;
+}
+
+// DB row 업데이트
+async function updateRowToSupabase(appRow) {
+  const user = await getAuthedUser();
+  if (!user) throw new Error("로그인이 필요합니다.");
+  if (!appRow.id) throw new Error("row id가 없습니다.");
+
+  const payload = {
+    no: appRow.no,
+    ko_text: appRow.ko ?? "",
+    en_text: appRow.en ?? "",
+    history: Array.isArray(appRow.history) ? appRow.history : [],
+    count: appRow.count ?? 0,
+    review_day: appRow.reviewDay ?? "",
+  };
+
+  const { error } = await supa
+    .from("sentences")
+    .update(payload)
+    .eq("id", appRow.id)
+    .eq("user_id", user.id); // 안전장치(정책 + 이중 체크)
+
+  if (error) throw error;
+}
+
+// DB row 삭제
+async function deleteRowFromSupabase(appRowId) {
+  const user = await getAuthedUser();
+  if (!user) throw new Error("로그인이 필요합니다.");
+
+  const { error } = await supa
+    .from("sentences")
+    .delete()
+    .eq("id", appRowId)
+    .eq("user_id", user.id);
+
+  if (error) throw error;
+}
+
+// no(번호) 재정렬이 필요할 때 DB에 반영 (간단히 전부 업데이트)
+async function syncAllNosToSupabase() {
+  const user = await getAuthedUser();
+  if (!user) return;
+
+  // 너무 자주 호출하면 비효율적이라, 삭제/삽입 직후에만 호출 추천
+  const updates = state.rows.map((r) => ({
+    id: r.id,
+    user_id: user.id,
+    no: r.no,
+  }));
+
+  // upsert로 no만 맞춰줌 (id 기준)
+  const { error } = await supa
+    .from("sentences")
+    .upsert(updates, { onConflict: "id" });
+
+  if (error) console.error("syncAllNosToSupabase error:", error);
+}
 
 /* -----------------------
    State + Persistence
@@ -242,30 +369,57 @@ function renumberRows() {
   state.rows.forEach((r, idx) => (r.no = idx + 1));
 }
 
-function addRow() {
+async function addRow() {
   const row = {
-    id: uid(),
+    id: null,                 // DB에서 insert 후 uuid 받음
     no: state.rows.length + 1,
     ko: "",
     en: "",
-    history: [], // last 5: "O" | "X" | "T"
+    history: [],
     count: 0,
     reviewDay: "",
   };
+
+  // 화면엔 먼저 추가(UX), DB 저장 실패하면 롤백
   state.rows.push(row);
   renumberRows();
   saveState();
+  renderPractice();
+  renderDashboard();
+
+  try {
+    const newId = await insertRowToSupabase(row);
+    row.id = newId;
+    saveState();
+  } catch (e) {
+    alert("DB 저장 실패: " + (e?.message ?? e));
+    // 롤백
+    state.rows = state.rows.filter((r) => r !== row);
+    renumberRows();
+    saveState();
+    renderPractice();
+    renderDashboard();
+  }
 }
 
-function updateRow(id, patch) {
+async function updateRow(id, patch) {
   const row = state.rows.find((r) => r.id === id);
   if (!row) return;
   Object.assign(row, patch);
+
   saveState();
   renderDashboard();
+
+  // DB 반영
+  try {
+    // id가 아직 null이면(방금 추가된 row insert 전) 업데이트 스킵
+    if (row.id) await updateRowToSupabase(row);
+  } catch (e) {
+    console.error("updateRow DB error:", e);
+  }
 }
 
-function pushResult(id, value) {
+async function pushResult(id, value) {
   const row = state.rows.find((r) => r.id === id);
   if (!row) return;
 
@@ -279,14 +433,42 @@ function pushResult(id, value) {
   saveState();
   renderPractice();
   renderDashboard();
+
+  try {
+    if (row.id) await updateRowToSupabase(row);
+  } catch (e) {
+    console.error("pushResult DB error:", e);
+  }
 }
 
-function deleteRow(id) {
+async function deleteRow(id) {
+  const row = state.rows.find((r) => r.id === id);
+  if (!row) return;
+
+  // UI 먼저 삭제
   state.rows = state.rows.filter((r) => r.id !== id);
   renumberRows();
   saveState();
   renderPractice();
   renderDashboard();
+
+  // DB 삭제
+  try {
+    if (row.id) await deleteRowFromSupabase(row.id);
+    // 번호(no)도 DB에 맞춰주기
+    await syncAllNosToSupabase();
+  } catch (e) {
+    alert("DB 삭제 실패: " + (e?.message ?? e));
+    // 실패 시 다시 로드가 제일 안전
+    const rows = await loadRowsFromSupabase();
+    if (rows) {
+      state.rows = rows;
+      renumberRows();
+      saveState();
+      renderPractice();
+      renderDashboard();
+    }
+  }
 }
 
 function symbolFrom(v) {
@@ -388,7 +570,7 @@ function renderPractice() {
     del.className = "btn-danger";
     del.type = "button";
     del.textContent = "삭제";
-    del.addEventListener("click", () => deleteRow(row.id));
+    del.addEventListener("click", async () => deleteRow(row.id));
     tdDel.appendChild(del);
     tr.appendChild(tdDel);
 
@@ -400,8 +582,8 @@ function bindPractice() {
   const addBtn = $("#addRow");
   const gotoDash = $("#gotoDashboard");
 
-  addBtn?.addEventListener("click", () => {
-    addRow();
+  addBtn?.addEventListener("click", async () => {
+    await addRow();
     renderPractice();
     renderDashboard();
   });
@@ -484,6 +666,22 @@ async function refreshAuthUI() {
   }
 }
 
+async function initFromSession() {
+  await refreshAuthUI(); // 상태 글자/버튼 활성화 갱신
+
+  const user = await getAuthedUser();
+  if (!user) return; // 로그아웃이면 DB 로드 안 함
+
+  const rows = await loadRowsFromSupabase();
+  if (rows) {
+    state.rows = rows;
+    renumberRows();
+    saveState();       // 로컬 캐시(옵션)
+    renderPractice();
+    renderDashboard();
+  }
+}
+   
 async function handleLogin() {
   const email = document.querySelector("#authEmail")?.value?.trim();
   const password = document.querySelector("#authPass")?.value ?? "";
@@ -493,8 +691,20 @@ async function handleLogin() {
     alert("로그인 실패: " + error.message);
     return;
   }
+
+  // ✅ 로그인 후: DB에서 내 데이터 로드
+  const rows = await loadRowsFromSupabase();
+  if (rows) {
+    state.rows = rows;
+    renumberRows();
+    saveState(); // 로컬 캐시도 업데이트(선택)
+    renderPractice();
+    renderDashboard();
+  }
+
   await refreshAuthUI();
 }
+
 
 async function handleLogout() {
   await supa.auth.signOut();
@@ -507,11 +717,11 @@ document.querySelector("#btnLogout")?.addEventListener("click", handleLogout);
 
 // 세션 변화(자동 로그인/로그아웃) 감지
 supa.auth.onAuthStateChange(() => {
-  refreshAuthUI();
+  initFromSession();
 });
 
 // 페이지 처음 열릴 때 상태 반영
-refreshAuthUI();
-
+initFromSession();
 
 });
+
