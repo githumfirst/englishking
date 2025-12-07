@@ -189,15 +189,19 @@ body{
 /* ✅ 오늘 누계목표 가이드 세로줄 */
 .progress-marker{
   position: absolute;
-  top: -6px;
-  bottom: -6px;
-  width: 2px;
+  top: -10px;        /* 위로 더 길게 */
+  bottom: -10px;     /* 아래로 더 길게 */
+  width: 6px;        /* 더 두껍게 */
   left: 0%;
-  background: rgba(255, 255, 255, 0.75);
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.35), 0 0 14px rgba(255,255,255,0.25);
+  background: linear-gradient(180deg, #ffd166, #ff5d5d); /* 눈에 띄는 그라데이션 */
+  box-shadow:
+    0 0 0 2px rgba(0,0,0,0.45),      /* 바깥 테두리(배경에서 분리) */
+    0 0 18px rgba(255, 209, 102, .55),
+    0 0 26px rgba(255, 93, 93, .35);
   border-radius: 999px;
   pointer-events: none;
 }
+
 
 /* 텍스트 영역 */
 .progress-meta2{
