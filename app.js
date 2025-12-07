@@ -583,9 +583,7 @@ function bindPractice() {
   const gotoDash = $("#gotoDashboard");
 
   addBtn?.addEventListener("click", async () => {
-    await addRow();
-    renderPractice();
-    renderDashboard();
+    await addRow(); // addRow 안에서 이미 렌더까지 함
   });
 
   gotoDash?.addEventListener("click", () => {
@@ -724,4 +722,5 @@ supa.auth.onAuthStateChange(() => {
 initFromSession();
 
 });
+
 
