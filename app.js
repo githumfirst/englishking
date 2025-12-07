@@ -12,6 +12,20 @@ const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const STORAGE_KEY = "nativeEnglishApp:v1";
 const $ = (sel) => document.querySelector(sel);
 
+function maskEmail(email) {
+  if (!email || typeof email !== "string") return "";
+  const at = email.indexOf("@");
+  if (at < 0) return email;
+
+  const name = email.slice(0, at);
+  const domain = email.slice(at); // '@gmail.com' 포함
+
+  const visible = name.slice(0, 3);
+  const masked = "*".repeat(Math.max(0, name.length - 3));
+
+  return `${visible}${masked}${domain}`;
+}
+
 function todayISO() {
   const d = new Date();
   const yyyy = d.getFullYear();
@@ -460,7 +474,7 @@ async function refreshAuthUI() {
   const btnLogout = document.querySelector("#btnLogout");
 
   if (session?.user) {
-    if (status) status.textContent = `로그인됨: ${session.user.email}`;
+    if (status) status.textContent = `로그인됨: ${maskEmail(session.user.email)}`;
     if (btnLogin) btnLogin.disabled = true;
     if (btnLogout) btnLogout.disabled = false;
   } else {
