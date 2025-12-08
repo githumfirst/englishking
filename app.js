@@ -347,6 +347,12 @@ async function addRow() {
   renderPractice();
   renderDashboard();
 
+ // auto scrolling
+ requestAnimationFrame(() => {
+   const btn = document.getElementById("addRow");
+   if (btn) btn.scrollIntoView({ behavior: "smooth", block: "end" });
+ });
+
   try {
     const newId = await insertRowToSupabase(row);
     row.id = newId;
