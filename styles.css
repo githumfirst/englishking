@@ -1,19 +1,16 @@
 :root{
-  --bg: #0b0c10;
-  --panel: rgba(255,255,255,.06);
-  --panel2: rgba(255,255,255,.09);
-  --border: rgba(255,255,255,.12);
-  --text: rgba(255,255,255,.92);
-  --muted: rgba(255,255,255,.62);
-  --danger: #ff5d5d;
-  --ok: #3ddc97;
-  --warn: #ffd166;
-  --shadow: 0 16px 50px rgba(0,0,0,.35);
-  --radius: 18px;
+  --bg:#0b0c10;
+  --panel:rgba(255,255,255,.06);
+  --border:rgba(255,255,255,.12);
+  --text:rgba(255,255,255,.92);
+  --muted:rgba(255,255,255,.62);
+  --danger:#ff5d5d;
+  --shadow:0 16px 50px rgba(0,0,0,.35);
+  --radius:18px;
 }
 
-*{ box-sizing:border-box; }
-html,body{ height:100%; }
+*{box-sizing:border-box}
+html,body{height:100%}
 body{
   margin:0;
   background:
@@ -21,433 +18,545 @@ body{
     radial-gradient(900px 500px at 90% 0%, rgba(0,255,198,.14), transparent 55%),
     radial-gradient(900px 600px at 90% 90%, rgba(255,168,76,.12), transparent 55%),
     var(--bg);
-  color: var(--text);
+  color:var(--text);
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Apple SD Gothic Neo, "Noto Sans KR", "Malgun Gothic", sans-serif;
 }
 
-.app-shell{
-  min-height:100%;
-  padding: 18px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
+.app-shell{min-height:100%; padding:18px; max-width:1200px; margin:0 auto;}
+.hidden{display:none}
+.muted{color:var(--muted)}
 
 .topbar{
-  display:flex;
-  justify-content: space-between;
-  align-items:center;
-  padding: 14px 16px;
-  border: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  position: sticky;
-  top: 12px;
-  backdrop-filter: blur(14px);
-  z-index: 10;
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  padding:14px 16px;
+  border:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  position:sticky; top:12px; z-index:10;
+  backdrop-filter:blur(14px);
 }
-
-.brand{ display:flex; align-items:center; gap:12px; }
+.brand{display:flex; align-items:center; gap:12px}
 .logo-dot{
   width:12px; height:12px; border-radius:999px;
-  background: linear-gradient(135deg, rgba(120,80,255,1), rgba(0,255,198,1));
-  box-shadow: 0 0 20px rgba(120,80,255,.45);
+  background:linear-gradient(135deg, rgba(120,80,255,1), rgba(0,255,198,1));
+  box-shadow:0 0 20px rgba(120,80,255,.45);
 }
-.brand-title{ font-weight: 800; letter-spacing:.2px;}
-.brand-sub{ font-size:12px; color: var(--muted); margin-top:2px; }
-
-.topbar-actions{ display:flex; align-items:center; gap:10px; }
-
-.main{ padding-top: 14px; }
-
-.page{ padding: 10px 2px 40px; }
-.hidden{ display:none; }
-
-.page-head{
-  display:flex;
-  align-items:flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 16px 0 14px;
-}
-.page-head-actions{ display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
-
-.h1{ margin:0; }
-.muted{ color: var(--muted); }
-.footer-hint{ padding: 10px 4px 0; }
-
-.grid{
-  display:grid;
-  gap: 14px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.card{
-  border: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
-  border-radius: var(--radius);
-  padding: 14px;
-  box-shadow: var(--shadow);
-}
-.card.wide{ grid-column: 1 / -1; }
-.card-title{
-  font-weight: 750;
-  margin-bottom: 12px;
-  color: rgba(255,255,255,.88);
-}
+.brand-title{font-weight:800}
+.brand-sub{font-size:12px; color:var(--muted); margin-top:2px}
 
 .btn{
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,.08);
-  color: var(--text);
-  padding: 10px 12px;
-  border-radius: 12px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.08);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:12px;
   cursor:pointer;
-  transition: transform .06s ease, background .15s ease, border-color .15s ease;
-  user-select:none;
 }
-.btn:hover{ background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.18); }
-.btn:active{ transform: translateY(1px); }
+.btn:hover{background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.18)}
 .btn.primary{
-  border-color: rgba(0,255,198,.28);
-  background: linear-gradient(135deg, rgba(0,255,198,.18), rgba(120,80,255,.14));
+  border-color:rgba(0,255,198,.28);
+  background:linear-gradient(135deg, rgba(0,255,198,.18), rgba(120,80,255,.14));
 }
-.btn.ghost{ background: transparent; }
+.btn-danger{
+  border:1px solid rgba(255,93,93,.35);
+  background:rgba(255,93,93,.12);
+  color:rgba(255,255,255,.9);
+  padding:9px 12px;
+  border-radius:12px;
+  cursor:pointer;
+}
+.btn-danger:hover{background:rgba(255,93,93,.18)}
 
-.filelike{ position: relative; overflow:hidden; }
-.filelike input{
-  position:absolute; inset:0; opacity:0; cursor:pointer;
+.page{padding:10px 2px 40px}
+.page-head{
+  display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+  margin:16px 0 14px;
 }
+.page-head-actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
 
-.inline-input{
-  width: min(720px, 100%);
-  border: 1px dashed rgba(255,255,255,.25);
-  background: rgba(255,255,255,.04);
-  padding: 8px 10px;
-  border-radius: 12px;
-  color: var(--text);
-  outline:none;
-}
-.inline-input.title{
-  font-size: 28px;
-  font-weight: 850;
-  letter-spacing: -.2px;
-}
-
-.form-grid{
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-.field span{ display:block; font-size: 12.5px; color: var(--muted); margin-bottom: 8px;}
-.field input{
-  width:100%;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,.06);
-  color: var(--text);
-  padding: 10px 10px;
-  border-radius: 12px;
-  outline:none;
-}
-.field input:focus{ border-color: rgba(0,255,198,.35); }
-.readonly .readonly-box{
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,.05);
-  padding: 10px 10px;
-  border-radius: 12px;
+.card{
+  border:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+  border-radius:var(--radius);
+  padding:14px;
+  box-shadow:var(--shadow);
 }
 
-.progress-wrap{ display:flex; flex-direction: column; gap: 12px; }
-.progress-meta{ display:flex; gap: 8px; flex-wrap: wrap; }
-.pill{
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,.05);
-  padding: 8px 10px;
-  border-radius: 999px;
-  font-size: 13px;
-}
+/* =========================
+   Practice “Table” layout
+   ========================= */
 
-.progress-bar{
-  width:100%;
-  height: 14px;
-  background: rgba(255,255,255,.07);
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.10);
-  overflow:hidden;
-
-  /* ✅ 가이드선 위치 기준 */
-  position: relative;
-}
-
-.progress-fill{
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, rgba(0,255,198,.9), rgba(120,80,255,.85));
-  border-radius: 999px;
-  transition: width .25s ease;
-}
-
-/* ✅ 오늘 누계목표 가이드 세로줄 */
-.progress-marker{
-  position: absolute;
-  top: -10px;        /* 위로 더 길게 */
-  bottom: -10px;     /* 아래로 더 길게 */
-  width: 6px;        /* 더 두껍게 */
-  left: 0%;
-  background: linear-gradient(180deg, #ffd166, #ff5d5d); /* 눈에 띄는 그라데이션 */
-  box-shadow:
-    0 0 0 2px rgba(0,0,0,0.45),      /* 바깥 테두리(배경에서 분리) */
-    0 0 18px rgba(255, 209, 102, .55),
-    0 0 26px rgba(255, 93, 93, .35);
-  border-radius: 999px;
-  pointer-events: none;
-}
-
-
-/* 텍스트 영역 */
-.progress-meta2{
-  margin-top: 6px;
-  font-size: 13px;
-  opacity: .9;
-}
-
-.table-wrap{ overflow:auto; }
+.table-wrap{overflow:visible}
 .tbl{
   width:100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  min-width: 980px;
+  border-collapse:separate;
+  border-spacing:0; /* row 사이 간격 */
 }
-.tbl th, .tbl td{
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  padding: 10px 10px;
-  vertical-align: top;
-}
-.tbl thead th{
-  position: sticky;
-  top: 0;
-  background: rgba(15,16,22,.85);
-  backdrop-filter: blur(10px);
-  font-size: 12.5px;
-  color: rgba(255,255,255,.72);
-  text-align:left;
-}
-.col-num{ width:60px; }
-.col-result{ width:120px; }
-.col-last5{ width:160px; }
-.col-count{ width:80px; }
-.col-date{ width:130px; }
-.col-del{ width:80px; text-align:center; }
 
+/* ✅ table 레이아웃을 끄고(블록화) row 간격을 gap으로 제어 */
+.tbl{ display:block; }
+.tbl thead{ display:none; }
+.tbl tbody{
+  display:flex;
+  flex-direction:column;
+  gap:1px;           /* 여기로 행 간격 조절 */
+}
+.tbl tr{ display:grid; }  /* 너가 이미 쓰는 grid 유지 */
+
+.tbl tbody{
+  display:flex;
+  flex-direction:column;
+  gap:1px 14px;          /* ← 여기 값으로 행 간격 조절 */
+}
+
+/* 헤더는 숨기고 row마다 카드처럼 보이게 */
+.tbl thead{display:none}
+
+/* row 카드 */
+.tbl tr{
+  display:grid;
+
+  grid-template-areas:
+    "no ko result last5 count day del"
+    ".  en en     en    en   en  en";
+
+grid-template-columns:
+36px /* no */
+1fr /* ko (남는 폭 전부) */
+140px /* 결과: 210px → 140px */
+110px /* 최종5회: 140px → 110px */
+56px /* 횟수: 70px → 56px */
+108px /* 리뷰데이: 120px → 108px */
+72px; /* 삭제: 84px → 72px */
+
+
+gap: 1px 10px; /* 14px → 10px (원하면 8px까지) */
+
+
+
+  align-items:start;
+
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.03);
+  border-radius:16px;
+  padding:2px;
+}
+
+/* td 기본 밑줄 제거 */
+.tbl td{
+  border:0;
+  padding:0;
+  margin:0;
+  vertical-align:top;
+}
+
+/* areas */
+.td-no{grid-area:no; text-align:right; font-weight:800; opacity:.85; padding-top:10px;}
+.td-ko{grid-area:ko;}
+.td-en{grid-area:en;}
+.td-result{
+  grid-area:result;
+  display:flex;
+  flex-direction:column;
+  align-items:center;   /* 라벨과 버튼을 가로 가운데 */
+  gap:6px;
+}
+.td-history{grid-area:last5;}
+.td-count{grid-area:count;}
+.td-day{grid-area:day;}
+.td-del{grid-area:del; display:flex; align-items:center; justify-content:center; padding-top:18px;}
+
+/* inputs */
 .cell-input{
   width:100%;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.05);
-  color: var(--text);
-  padding: 10px 10px;
-  border-radius: 12px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:12px;
   outline:none;
 }
-.cell-input:focus{ border-color: rgba(120,80,255,.35); }
+.cell-input:focus{border-color:rgba(120,80,255,.35)}
 
-.english-wrap{
-  position: relative;
-}
+.english-wrap{position:relative}
 .english-wrap .cell-input{
-  color: transparent;
-  text-shadow: 0 0 12px rgba(255,255,255,.18);
-  caret-color: rgba(255,255,255,.9);
+  color:transparent;
+  text-shadow:0 0 12px rgba(255,255,255,.18);
+  caret-color:rgba(255,255,255,.9);
 }
 .english-wrap:focus-within .cell-input,
 .english-wrap:hover .cell-input{
-  color: var(--text);
-  text-shadow: none;
+  color:var(--text);
+  text-shadow:none;
 }
 
+/* 결과(O/X/△) 버튼 크기 줄이기 */
 .chip{
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(255,255,255,.05);
   color: var(--text);
-  padding: 9px 10px;
+
+  /* ↓↓↓ 여기부터 크기 조절 */
+  padding: 6px 8px;     /* 기존보다 작게 */
+  font-size: 13px;      /* 글자도 살짝 작게 */
+  line-height: 1;
+  min-width: 34px;      /* 동그라미 최소 가로 */
+  height: 34px;         /* 동그라미 세로 */
   border-radius: 999px;
-  cursor:pointer;
-}
-.chip:hover{ background: rgba(255,255,255,.10); }
+  /* ↑↑↑ 여기까지 */
 
-.btn-danger, .delbtn{
-  border: 1px solid rgba(255,93,93,.35);
-  background: rgba(255,93,93,.12);
-  color: rgba(255,255,255,.9);
-  padding: 9px 10px;
-  border-radius: 12px;
-  cursor:pointer;
-}
-.btn-danger:hover, .delbtn:hover{ background: rgba(255,93,93,.18); }
-
-@media (max-width: 900px){
-  .grid{ grid-template-columns: 1fr; }
-  .form-grid{ grid-template-columns: 1fr; }
-  .inline-input.title{ font-size: 22px; }
+  cursor: pointer;
 }
 
-.authbox{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.chip:hover{background:rgba(255,255,255,.10)}
+
+/* 라벨들(컬럼명) */
+.td-result::before,
+.td-history::before,
+.td-count::before,
+.td-day::before{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:6px;
+  text-align:center;
+}
+.td-result::before{content:"결과";}
+.td-history::before{content:"최종 5회";}
+.td-count::before{content:"횟수";}
+.td-day::before{content:"리뷰데이";}
+
+/* 값(텍스트) 정렬 */
+.td-history, .td-count, .td-day{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  padding-top:2px;
+}
+.td-history{font-weight:400}
+.td-count{font-weight:400; font-size:18px}
+.td-day{font-weight:400}
+
+/* 모바일: 오른쪽 정보는 아래로 내려서 보기 좋게 */
+@media (max-width: 920px){
+  .tbl tr{
+    grid-template-columns: 28px 1fr;
+    grid-template-areas:
+      "no ko"
+      ".  en"
+      ".  result"
+      ".  last5"
+      ".  count"
+      ".  day"
+      ".  del";
+  }
+  .td-del{justify-content:flex-start; padding-top:0}
+}
+
+/* auth inputs */
+.authbox{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
 .auth-input{
   border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.05);
-  color: rgba(255,255,255,.92);
-  padding: 10px 10px;
-  border-radius: 12px;
-  outline: none;
+  background:rgba(255,255,255,.05);
+  color:rgba(255,255,255,.92);
+  padding:10px 10px;
+  border-radius:12px;
+  outline:none;
 }
 
-/* ===== All screens: table row -> stacked card layout ===== */
-.tbl thead {
-  display: none; /* 헤더 숨김: 카드형에서는 라벨을 각 칸에 붙임 */
+/* === [FIX] 결과(ㅇ x △) 때문에 줄 높이가 커지는 문제 해결 === */
+/* styles.css 맨 아래에 그대로 붙여넣기 */
+
+.tbl tr > td.td-result::before{
+  margin-bottom: 2px !important;  /* 라벨-버튼 간격 축소 */
+  line-height: 1.1 !important;
+  font-size: 12px !important;
 }
 
-.tbl,
-.tbl tbody,
-.tbl tr,
-.tbl td {
-  display: block;
-  width: 100%;
+.tbl tr > td.td-result{
+  align-items: center !important;
 }
 
-.tbl tr {
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-  padding: 12px;
-  margin: 12px 0;
-  background: rgba(255,255,255,0.03);
+/* 버튼(ㅇ x △)을 "진짜로" 작게: 원형 크기 고정 */
+.tbl tr > td.td-result .chip{
+  width: 28px !important;
+  height: 28px !important;
+  padding: 0 !important;
+  line-height: 1 !important;      /* ← 34px 금지 */
+  font-size: 12px !important;
+
+  display: inline-flex !important; /* ← 가운데 정렬 확실히 */
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-/* 번호(#) */
-.tbl .td-no {
-  font-weight: 700;
-  opacity: 0.8;
-  margin-bottom: 8px;
+
+/* (선택) 버튼 사이 간격도 조금 줄이고 싶으면 */
+.tbl .td-result{
+  gap: 6px !important;
 }
 
-.tbl .cell-input {
-  width: 100%;
-  box-sizing: border-box;
+.chip-row{
+  display:flex;
+  justify-content:center;
+  gap:8px;
 }
 
-/* 아래 정보들(결과/최종5회/횟수/리뷰데이/삭제) 간격 */
-.tbl td:nth-child(n+4) {
+/* 최종 5회 기호 크기/정렬 통일 */
+.history-marks{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  font-family: "Noto Sans Symbols 2","Segoe UI Symbol","Apple Symbols","Noto Sans KR",system-ui,sans-serif;
+}
+
+.history-marks .mark{
+  width:18px;
+  height:18px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;   /* 세 기호 크기 통일 */
+  line-height:1;
+}
+
+/* x가 아래로 처져 보이는 것 보정 */
+.history-marks .mark-x{
+  transform: translateY(-1px);
+}
+
+/* 최종 5회( td-history 텍스트 )의 기호 크기/베이스라인 보정 */
+.td-history{
+  font-family: "Noto Sans Symbols 2","Segoe UI Symbol","Apple Symbols","Noto Sans KR",system-ui,sans-serif;
+  line-height: 1;         /* 베이스라인 흔들림 줄이기 */
+}
+
+.td-history{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* '최종 5회' 라벨 밑에 있는 실제 값(ㅇ x △) */
+.td-history{
+  /* 이미 flex column이라 값은 두 번째 줄인데,
+     textContent 자체를 가운데 정렬하고 간격 줄이려면 아래도 OK */
+  text-align:center;
+  letter-spacing: 0.02em;
+  font-size:16px;         /* 여기서 전체 크기 통일 */
+}
+
+/* 횟수/리뷰데이 값만 위로 당기기 */
+.td-count .td-value,
+.td-day .td-value{
+  display:inline-block;
+  transform: translateY(-4px); /* ← 2~6px 사이로 취향 조절 */
+  line-height:1;
+}
+
+/* 최종 5회 라벨(컬럼명) 위치를 다른 컬럼과 동일하게 */
+.tbl tr > td.td-history::before{
+  margin-bottom: 2px !important;  /* 기존 6px을 덮어씀 */
+  line-height: 1.1 !important;
+  font-size: 12px !important;
+}
+
+/* 연습 페이지 제목 + 버튼 한 줄에 배치 */
+.practice-title-row{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  flex-wrap:nowrap;   /* 줄바꿈 금지 */
+}
+
+.practice-title{
+  margin:0;           /* h1 기본 margin 제거 */
+  white-space:nowrap; /* 제목 줄바꿈 방지 */
+}
+
+/* 버튼도 줄바꿈 안 나게 */
+.practice-title-row #gotoDashboard{
+  white-space:nowrap;
+}
+
+/* =========================
+   Dashboard KPI 강조 스타일
+   ========================= */
+
+/* 누계 목표 문장(#todayTargetText)은 확실히 존재 */
+#todayTargetText{
   margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: linear-gradient(180deg, rgba(0,255,198,.10), rgba(255,255,255,.04));
+  box-shadow: 0 10px 30px rgba(0,0,0,.28);
+  font-weight: 700;
+  letter-spacing: .2px;
+  color: rgba(255,255,255,.92);
 }
 
-/* ===== Card layout: KO on top, toolbar row, EN below ===== */
-.tbl tr {
-  display: grid;
-  grid-template-columns: 1fr auto auto auto auto auto; /* 한글은 넓게, 나머지는 auto */
-  grid-template-areas:   
-    "ko res hist cnt day del"
-    "en en en en en en";
-  gap: 4px 12px;   /* (행 간격, 열 간격) => 행(세로)만 확 줄임 */
-  align-items: start;
+/* #todayTargetText 안의 숫자가 더 눈에 띄도록(숫자만 딱 골라내기 어렵기 때문에 전체 대비를 올림) */
+#todayTargetText{
+  font-size: 15px;
+  line-height: 1.25;
 }
 
-/* 카드 레이아웃에서는 td 패딩을 줄여서 KO-EN 간격을 타이트하게 */
-.tbl tr > td {
-  padding-top: 4px;
-  padding-bottom: 4px;
+/* 대시보드 카드 안 “기간/일일/현재/목표/달성률” 한 줄(텍스트 덩어리)을 더 읽기 좋게 */
+.card .dash-inline,
+.card .dash-summary,
+#dashSummary,
+#dashStats,
+#dashStatsLine{
+  /* 혹시 이런 id/class가 있으면 자동 적용 */
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+
+  margin: 10px 0 12px;
+  padding: 10px 12px;
+
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px;
+  background: rgba(255,255,255,.04);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
 }
 
-/* 번호 */
-.tbl .td-no {
-  grid-area: no;
-  margin: 0;
+/* 위의 selector가 안 맞는 경우를 대비해서:
+   대시보드 카드 내부에서 "기간:" 같은 텍스트가 들어간 줄이 p/span으로 있을 때를 넓게 커버 */
+.card p, .card .muted{
+  /* 기존 디자인을 크게 깨지 않게 기본 가독성만 소폭 개선 */
+  letter-spacing: .15px;
 }
 
-/* KO/EN 칸을 grid 영역에 배치 (2번째, 3번째 td) */
-.tbl tr > td:nth-child(2) { grid-area: ko; }
-.tbl tr > td:nth-child(3) { grid-area: en; }
-
-/* 결과/최종5회/횟수/리뷰데이/삭제 (4~8번째 td) */
-.tbl tr > td:nth-child(4) { grid-area: res; }
-.tbl tr > td:nth-child(5) { grid-area: hist; }
-.tbl tr > td:nth-child(6) { grid-area: cnt; }
-.tbl tr > td:nth-child(7) { grid-area: day; }
-.tbl tr > td:nth-child(8) { grid-area: del; }
-
-/* 툴바 느낌: 가운데 정렬 + 줄바꿈 방지 */
-.tbl tr > td:nth-child(n+4) {
-  margin-top: 0;              /* 이전 카드 CSS에서 준 margin-top 제거 */
-  align-self: center;
-  white-space: nowrap;
+/* KPI 칩 스타일(HTML/JS가 추후에 span으로 감싸면 더 예쁘게 보이도록 준비용) */
+.kpi-chip{
+  display:inline-flex;
+  align-items:baseline;
+  gap:6px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.05);
+  color: rgba(255,255,255,.86);
+  font-weight: 700;
+}
+.kpi-chip b{
+  font-size: 16px;
+  color: rgba(255,255,255,.96);
 }
 
-/* 결과 버튼(ㅇ x △)을 한 줄로 */
-.tbl .td-result {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+/* 누계 목표 라인에서 핵심 단어(목표/현재) 느낌을 주고 싶으면:
+   추후 <span class="kpi-chip">로 감쌀 때 최적 */
+
+.dash-kpi{
+  margin-top: 14px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
-/* 삭제 버튼 위치/크기 */
-.tbl tr > td:nth-child(8) .btn-danger {
-  padding: 8px 12px;
+.kpi-row{
+  display:flex;
+  align-items:baseline;
+  gap:12px;
 }
 
-/* textarea는 폭 꽉 */
-.tbl .cell-input {
-  width: 100%;
-  box-sizing: border-box;
+.kpi-row .k{
+  width: 160px;
+  color: var(--muted);
+  font-size: 13px;
 }
 
-/* (카드 모드) 셀 밑줄 제거 */
-.tbl th, .tbl td {
-  border-bottom: 0 !important;
-}
-
-/* 번호를 KO 영역 안으로 붙이기 */
-.tbl tr { position: relative; }
-
-.tbl .td-no {
-  grid-area: ko;            /* KO 칸과 같은 영역 */
-  position: absolute;       /* KO 위에 얹음 */
-  top: 12px;
-  left: -10px;        /* ✅ 글박스 밖으로 */
+.kpi-row .v{
   font-weight: 800;
-  opacity: 0.85;
-  margin: 0;
+  letter-spacing: .2px;
 }
 
-/* 번호 때문에 한글 textarea가 겹치지 않도록 왼쪽 패딩 확보 */
-.tbl tr > td:nth-child(2) .cell-input {
-  padding-left: 40px;
+.dash-greenbox{
+  margin-top:12px;
+  border-radius:16px;
+  border:1px solid rgba(0,255,198,.18);
+  background:linear-gradient(180deg, rgba(0,255,198,.10), rgba(0,0,0,.08));
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+  padding:14px 14px 12px;
 }
 
-/* ===== 카드 레이아웃: 결과/최종5회/횟수/리뷰데이/삭제 라벨 다시 표시 ===== */
-
-/* 라벨 공통 스타일 */
-.tbl tr > td.td-result::before,
-.tbl tr > td.td-history::before,
-.tbl tr > td.td-count::before,
-.tbl tr > td.td-day::before,
-.tbl tr > td.td-del::before{
-  display: block;
-  font-size: 12px;
-  opacity: 0.7;
-  margin-bottom: 6px;
-  content: "";
+.dash-todaytext{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,.10);
+  color:rgba(255,255,255,.92);
+  font-weight:700;
 }
 
-/* 각 라벨 텍스트 */
-.tbl tr > td.td-result::before { content: "결과"; }
-.tbl tr > td.td-history::before { content: "최종 5회"; }
-.tbl tr > td.td-count::before { content: "횟수"; }
-.tbl tr > td.td-day::before { content: "리뷰데이"; }
-.tbl tr > td.td-del::before { content: "삭제"; }
+/* (선택) KPI 글자 톤 조금 더 정리 */
+.dash-kpi .k{ color: rgba(255,255,255,.72); }
+.dash-kpi .v{ color: rgba(255,255,255,.92); font-weight:800; font-size:18px; }
 
-/* 라벨 때문에 버튼/텍스트가 아래로 밀리는 느낌 줄이기(선택) */
-.tbl tr > td.td-del { text-align: left; }
+/* KPI 값(오른쪽 숫자) 볼드 제거 */
+.dash-kpi .v,
+.dash-kpi #kpiDuration,
+.dash-kpi #kpiDaily,
+.dash-kpi #kpiCumTarget,
+.dash-kpi #kpiDone,
+.dash-kpi #kpiPercent{
+  font-weight: 400 !important; /* 400=normal */
+}
 
+/* 한글/영어 입력칸을 한 줄 높이로 */
+.tbl .td-ko textarea.cell-input,
+.tbl .td-en textarea.cell-input{
+  height: 44px;          /* 한 줄 느낌 (원하면 40~52px로 조절) */
+  padding: 10px 12px;
+  line-height: 22px;  
+}
 
+.tbl{
+  width: 100%;
+  table-layout: fixed;
+}
 
+/* === RIGHT COLUMNS SQUEEZE (paste at VERY BOTTOM) === */
+.tbl tbody{ gap: 8px !important; } /* 행 간격(원하면 1~10px) */
 
+.tbl tr{
+  grid-template-columns:
+    36px   /* no */
+    1fr    /* ko */
+    110px  /* 결과 */
+    88px   /* 최종5회 */
+    44px   /* 횟수 */
+    84px   /* 리뷰데이 */
+    64px   /* 삭제 */
+    !important;
 
+  column-gap: 6px !important; /* 컬럼 사이 간격 */
+}
 
+/* 삭제칸 위 padding 줄여서 공간 덜 먹게 */
+.td-del{ padding-top: 6px !important; }
 
+/* 결과(O/X/△) 더 촘촘하게 */
+.tbl .chip-row{ gap: 4px !important; }
+.tbl tr > td.td-result{ gap: 4px !important; }
+.tbl tr > td.td-result::before{ margin-bottom: 1px !important; }
+.tbl tr > td.td-result .chip{
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  padding: 0 !important;
+  font-size: 12px !important;
+}
+
+/* 텍스트가 폭을 강제로 못 늘리게 */
+.td-history, .td-count, .td-day{
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
 

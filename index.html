@@ -11,155 +11,146 @@
     <header class="topbar">
       <div class="brand">
         <div class="logo-dot" aria-hidden="true"></div>
-        <div class="brand-text">
+        <div>
           <div class="brand-title">Native English</div>
           <div class="brand-sub">10,000 sentences</div>
         </div>
       </div>
 
-      <div class="topbar-actions">
-        <button class="btn ghost" id="btnExport">JSON 내보내기</button>
-        <label class="btn ghost filelike">
-          JSON 가져오기
-          <input type="file" id="fileImport" accept="application/json" />
-        </label>
+      <div id="topbarAuth" class="topbar-actions">
+        <input id="authEmail" class="auth-input" placeholder="email" />
+        <input id="authPass" class="auth-input" placeholder="password" type="password" />
+        <button id="btnLogin" class="btn primary">로그인</button>
+        <button id="btnLogout" class="btn">로그아웃</button>
       </div>
     </header>
 
-    <main class="main">
-      <!-- DASHBOARD -->
-      <section id="pageDashboard" class="page">
+    <main class="page">
+      <section id="pageDashboard">
         <div class="page-head">
-
-		<div class="authbox">
- 			 <input id="authEmail" class="auth-input" placeholder="email" />
-  			 <input id="authPass" class="auth-input" type="password" placeholder="password" />
-  			 <button id="btnLogin" class="btn">로그인</button>
-  			 <button id="btnLogout" class="btn ghost">로그아웃</button>
-  			 <span id="authStatus" class="muted"></span>
-		</div>
           <div>
-            <h1 class="h1">
-              <input id="dashTitle" class="inline-input title" value="1만 문장으로 원어민 되기" />
-            </h1>
-            <p class="muted">시작/종료 기반으로 자동 계산되고, 진도는 연습 페이지 입력 행 수로 집계됩니다.</p>
+            <h1 class="h1">1만 문장으로 원어민 되기</h1>
+            <div class="muted">시작/종료 기반으로 자동 계산되고, 진도는 연습 페이지 입력 횟수로 집계됩니다.</div>
           </div>
-
-          <!-- 페이지 전환 버튼(대시보드 전용 위치) -->
-          <button class="btn primary" id="gotoPractice">연습하기 →</button>
+          <div class="page-head-actions">
+            <div id="authStatus" class="muted"></div>
+            <button id="gotoPractice" class="btn primary">연습하기 →</button>
+          </div>
         </div>
 
-        <div class="grid">
-          <div class="card">
-            <div class="card-title">기간 설정</div>
-            <div class="form-grid">
-              <label class="field">
-                <span>시작일</span>
-                <input type="date" id="dashStart" />
-              </label>
-              <label class="field">
-                <span>종료일</span>
-                <input type="date" id="dashEnd" />
-              </label>
-              <div class="field readonly">
-                <span>기간</span>
-                <div class="readonly-box"><b id="dashDuration">-</b> 일</div>
-              </div>
-            </div>
+        <div class="card">
+          <div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px;">
+            <label class="field">
+              <span class="muted">시작일</span>
+              <input id="dashStart" type="date" />
+            </label>
+            <label class="field">
+              <span class="muted">종료일</span>
+              <input id="dashEnd" type="date" />
+            </label>
+            <label class="field">
+              <span class="muted">목표 문장수</span>
+              <input id="dashGoal" type="number" />
+            </label>
           </div>
 
-          <div class="card">
-            <div class="card-title">목표</div>
-            <div class="form-grid">
-              <label class="field">
-                <span>목표 문장수</span>
-                <input type="number" id="dashGoal" min="1" step="1" value="10000" />
-              </label>
-              <div class="field readonly">
-                <span>일목표</span>
-                <div class="readonly-box"><b id="dashDaily">-</b> 문장</div>
-              </div>
-              <div class="field readonly">
-                <span>현재 입력 행 수</span>
-                <div class="readonly-box"><b id="dashCount">-</b> 행</div>
-              </div>
-            </div>
+          <!-- progress bar -->
+          <div style="margin-top:14px; position:relative; height:14px; border-radius:999px; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.07); overflow:hidden;">
+            <div id="progressFill" style="height:100%; width:0%; background:linear-gradient(90deg, rgba(0,255,198,.9), rgba(120,80,255,.85));"></div>
+            <div id="todayMarker" style="position:absolute; top:-10px; bottom:-10px; width:6px; left:0%; background:linear-gradient(180deg, #ffd166, #ff5d5d); border-radius:999px;"></div>
           </div>
 
-          <div class="card wide">
-            <div class="card-title">진도율</div>
-
-            <div class="progress-wrap">
-              <div class="progress-meta">
-                <div class="pill">전체 <b id="dashGoalMirror">-</b> 문장</div>
-                <div class="pill">진도 <b id="dashPercent">-</b>%</div>
+          <!-- ✅ 초록 박스 안으로 KPI + todayTargetText 이동 -->
+          <div class="dash-greenbox">
+            <!-- ✅ 여기부터: 세로 KPI 요약 -->
+            <div class="dash-kpi">
+              <div class="kpi-row">
+                <span class="k">공부기간</span>
+                <span class="v" id="kpiDuration">-</span>
               </div>
 
-              <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-fill" id="progressFill"></div>
-
-                <!-- ✅ 오늘 기준 “누계 목표” 가이드선 -->
-                <div id="todayMarker" class="progress-marker" title="오늘까지 누계 목표"></div>
+              <div class="kpi-row">
+                <span class="k">일일목표</span>
+                <span class="v" id="kpiDaily">-</span>
               </div>
 
-              <!-- ✅ 가이드선 텍스트(원하면 숨겨도 됨) -->
-              <div class="progress-meta2">
-                <span id="todayTargetText" class="muted"></span>
+              <div class="kpi-row">
+                <span class="k">오늘까지 누계목표</span>
+                <span class="v" id="kpiCumTarget">-</span>
               </div>
 
-              <div class="progress-foot muted">
-                <span>팁: 연습 페이지에서 행을 추가/삭제하면 자동 반영됩니다.</span>
+              <div class="kpi-row">
+	  		 <span class="k">현재까지 공부한 문장</span>
+			 <span class="v">
+				 <span id="kpiDone">-</span>
+				 <span id="kpiDelta" class="kpi-sub"> </span>
+	                 </span>
+	      </div>
+
+              <div class="kpi-row">
+                <span class="k">달성율</span>
+                <span class="v">
+                  <span id="kpiPercent">-</span>
+                </span>
               </div>
             </div>
+            <!-- ✅ 여기까지: 세로 KPI 요약 -->
+            
           </div>
         </div>
       </section>
 
-      <!-- PRACTICE -->
-      <section id="pagePractice" class="page hidden">
+      <section id="pagePractice" class="hidden">
         <div class="page-head">
           <div>
-            <h1 class="h1">원어민영어 연습</h1>
-            <p class="muted">영어 문장은 기본 숨김 상태이며, 입력칸에 포커스/마우스가 있을 때만 표시됩니다.</p>
+            <div class="practice-title-row">
+              <h1 class="h1 practice-title">원어민영어 연습</h1>
+              <button id="gotoDashboard" class="btn primary">대시보드 가기 →</button>
+            </div>
           </div>
 
           <div class="page-head-actions">
-            <button class="btn" id="addRow">+ 행 추가</button>
-            <!-- 페이지 전환 버튼(연습 전용 위치) -->
-            <button class="btn ghost" id="gotoDashboard">대시보드 가기</button>
+            <button id="btnExport" class="btn">JSON 내보내기</button>
+            <label class="btn filelike">
+              JSON 가져오기
+              <input id="fileImport" type="file" accept="application/json" />
+            </label>
           </div>
         </div>
 
         <div class="card">
           <div class="table-wrap">
-            <table class="tbl" id="practiceTable">
-              <thead>
-                <tr>
-                  <th class="col-num">#</th>
-                  <th>한글 문장</th>
-                  <th>영어 문장</th>
-                  <th class="col-result">결과</th>
-                  <th class="col-last5">최종 5회</th>
-                  <th class="col-count">횟수</th>
-                  <th class="col-date">리뷰데이</th>
-                  <th class="col-del">삭제</th>
-                </tr>
-              </thead>
+            <table class="tbl">
+
+<table class="tbl">
+  <colgroup>
+    <col style="width:56px" />     <!-- # -->
+    <col />                        <!-- 한글(남는 폭 전부) -->
+    <col style="width:150px" />    <!-- 결과 -->
+    <col style="width:120px" />    <!-- 최종5회 -->
+    <col style="width:70px" />     <!-- 횟수 -->
+    <col style="width:120px" />    <!-- 리뷰데이 -->
+    <col style="width:84px" />     <!-- 삭제 -->
+    <col style="width:0" />        <!-- 영어(지금 구조에선 영향 적음) -->
+  </colgroup>
+
+  <tbody id="practiceBody"></tbody>
+</table>
+            
               <tbody id="practiceBody"></tbody>
             </table>
           </div>
-        </div>
 
-        <div class="footer-hint muted">
-          <span>자동 저장됨 · 내보내기/가져오기로 파일 관리 가능</span>
+          <div style="margin-top:10px; display:flex; justify-content:flex-start; padding-left:12px;">
+            <button id="addRow" class="btn primary">+ 행 추가</button>
+          </div>
+
         </div>
       </section>
     </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-	
   <script src="app.js"></script>
 </body>
 </html>
-
