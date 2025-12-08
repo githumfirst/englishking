@@ -347,12 +347,18 @@ async function addRow() {
   renderPractice();
   renderDashboard();
 
- // auto scrolling
- requestAnimationFrame(() => {
-   const btn = document.getElementById("addRow");
-   if (btn) btn.scrollIntoView({ behavior: "smooth", block: "end" });
- });
+  // ✅ 렌더 후: 마지막 행 입력칸을 화면에 올리고 + 포커스
+  requestAnimationFrame(() => {
+    const body = document.getElementById("practiceBody");
+    const lastRow = body?.lastElementChild;
+    if (!lastRow) return;
 
+    const input = lastRow.querySelector('input[type="text"], textarea, [contenteditable="true"]');
+    (input ?? lastRow).scrollIntoView({ behavior: "smooth", block: "center" });
+    if (input?.focus) input.focus({ preventScroll: true });
+  });
+
+  // DB 저장은 별도로
   try {
     const newId = await insertRowToSupabase(row);
     row.id = newId;

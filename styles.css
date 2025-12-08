@@ -581,3 +581,7 @@ gap: 1px 10px; /* 14px → 10px (원하면 8px까지) */
   overflow: hidden !important;
 }
 
+/* sticky 버튼(하단 고정)이 마지막 입력칸을 가리지 않게 아래 여백 확보 */
+.table-wrap{
+  padding-bottom: 10px; /* sticky 버튼 높이 + 여유 */
+}
