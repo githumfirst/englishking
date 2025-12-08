@@ -341,8 +341,7 @@ body{
 .tbl tr {
   display: grid;
   grid-template-columns: 1fr auto auto auto auto auto; /* 한글은 넓게, 나머지는 auto */
-  grid-template-areas:
-    "no no no no no no"
+  grid-template-areas:   
     "ko res hist cnt day del"
     "en en en en en en";
   gap: 4px 12px;   /* (행 간격, 열 간격) => 행(세로)만 확 줄임 */
@@ -400,6 +399,24 @@ body{
 /* (카드 모드) 셀 밑줄 제거 */
 .tbl th, .tbl td {
   border-bottom: 0 !important;
+}
+
+/* 번호를 KO 영역 안으로 붙이기 */
+.tbl tr { position: relative; }
+
+.tbl .td-no {
+  grid-area: ko;            /* KO 칸과 같은 영역 */
+  position: absolute;       /* KO 위에 얹음 */
+  top: 12px;
+  left: 14px;
+  font-weight: 800;
+  opacity: 0.85;
+  margin: 0;
+}
+
+/* 번호 때문에 한글 textarea가 겹치지 않도록 왼쪽 패딩 확보 */
+.tbl tr > td:nth-child(2) .cell-input {
+  padding-left: 40px;
 }
 
 
