@@ -97,6 +97,27 @@ async function updateRowToSupabase(appRow) {
   if (error) throw error;
 }
 
+// 결과 입력(O/X/△)에서만 review_day까지 업데이트
+async function updateResultToSupabase(appRow) {
+  const user = await getAuthedUser();
+  if (!user) throw new Error("로그인이 필요합니다.");
+  if (!appRow.id) throw new Error("row id가 없습니다.");
+
+  const payload = {
+    history: Array.isArray(appRow.history) ? appRow.history : [],
+    count: appRow.count ?? 0,
+    review_day: appRow.reviewDay ? appRow.reviewDay : null,
+  };
+
+  const { error } = await supa
+    .from("sentences")
+    .update(payload)
+    .eq("id", appRow.id)
+    .eq("user_id", user.id);
+
+  if (error) throw error;
+}
+
 // DB row 삭제
 async function deleteRowFromSupabase(appRowId) {
   const user = await getAuthedUser();
@@ -433,10 +454,10 @@ async function pushResult(id, value) {
   renderDashboard();
 
   try {
-    if (row.id) await updateRowToSupabase(row);
-  } catch (e) {
-    console.error("pushResult DB error:", e);
-  }
+  if (row.id) await updateResultToSupabase(row);
+   } catch (e) {
+  console.error("pushResult DB error:", e);
+   }
 }
 
 async function deleteRow(id) {
@@ -720,6 +741,7 @@ supa.auth.onAuthStateChange(() => {
 initFromSession();
 
 });
+
 
 
 
