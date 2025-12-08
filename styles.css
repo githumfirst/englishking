@@ -327,23 +327,6 @@ body{
   margin-bottom: 8px;
 }
 
-/* 한글/영어 라벨 + 세로 배치 */
-.tbl td:nth-child(2)::before {
-  content: "한글 문장";
-  display: block;
-  font-size: 12px;
-  opacity: 0.7;
-  margin-bottom: 6px;
-}
-
-.tbl td:nth-child(3)::before {
-  content: "영어 문장";
-  display: block;
-  font-size: 12px;
-  opacity: 0.7;
-  margin: 10px 0 6px;
-}
-
 .tbl .cell-input {
   width: 100%;
   box-sizing: border-box;
@@ -362,8 +345,14 @@ body{
     "no no no no no no"
     "ko res hist cnt day del"
     "en en en en en en";
-  gap: 10px 12px;
+  gap: 4px 12px;   /* (행 간격, 열 간격) => 행(세로)만 확 줄임 */
   align-items: start;
+}
+
+/* 카드 레이아웃에서는 td 패딩을 줄여서 KO-EN 간격을 타이트하게 */
+.tbl tr > td {
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 /* 번호 */
@@ -407,6 +396,7 @@ body{
   width: 100%;
   box-sizing: border-box;
 }
+
 
 
 
