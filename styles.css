@@ -397,6 +397,12 @@ body{
   box-sizing: border-box;
 }
 
+/* (카드 모드) 셀 밑줄 제거 */
+.tbl th, .tbl td {
+  border-bottom: 0 !important;
+}
+
+
 
 
 
