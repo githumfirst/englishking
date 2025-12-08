@@ -419,6 +419,32 @@ body{
   padding-left: 40px;
 }
 
+/* ===== 카드 레이아웃: 결과/최종5회/횟수/리뷰데이/삭제 라벨 다시 표시 ===== */
+
+/* 라벨 공통 스타일 */
+.tbl tr > td.td-result::before,
+.tbl tr > td.td-history::before,
+.tbl tr > td.td-count::before,
+.tbl tr > td.td-day::before,
+.tbl tr > td.td-del::before{
+  display: block;
+  font-size: 12px;
+  opacity: 0.7;
+  margin-bottom: 6px;
+  content: "";
+}
+
+/* 각 라벨 텍스트 */
+.tbl tr > td.td-result::before { content: "결과"; }
+.tbl tr > td.td-history::before { content: "최종 5회"; }
+.tbl tr > td.td-count::before { content: "횟수"; }
+.tbl tr > td.td-day::before { content: "리뷰데이"; }
+.tbl tr > td.td-del::before { content: "삭제"; }
+
+/* 라벨 때문에 버튼/텍스트가 아래로 밀리는 느낌 줄이기(선택) */
+.tbl tr > td.td-del { text-align: left; }
+
+
 
 
 
