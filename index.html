@@ -80,12 +80,12 @@
               </div>
 
               <div class="kpi-row">
-	  		 <span class="k">현재까지 공부한 문장</span>
-			 <span class="v">
-				 <span id="kpiDone">-</span>
-				 <span id="kpiDelta" class="kpi-sub"> </span>
-	                 </span>
-	      </div>
+                <span class="k">현재까지 공부한 문장</span>
+                <span class="v">
+                  <span id="kpiDone">-</span>
+                  <span id="kpiDelta" class="kpi-sub"> </span>
+                </span>
+              </div>
 
               <div class="kpi-row">
                 <span class="k">달성율</span>
@@ -95,7 +95,6 @@
               </div>
             </div>
             <!-- ✅ 여기까지: 세로 KPI 요약 -->
-            
           </div>
         </div>
       </section>
@@ -120,23 +119,21 @@
 
         <div class="card">
           <div class="table-wrap">
+            <!-- ✅ 테이블은 딱 1개만 -->
             <table class="tbl">
+              <!-- colgroup은 지금 CSS(grid) 구조에서는 큰 의미가 없지만, 유지하고 싶으면 여기 1번만 둬도 됨 -->
+              <colgroup>
+                <col style="width:56px" />     <!-- # -->
+                <col />                        <!-- 한글(남는 폭 전부) -->
+                <col style="width:150px" />    <!-- 결과 -->
+                <col style="width:120px" />    <!-- 최종5회 -->
+                <col style="width:70px" />     <!-- 횟수 -->
+                <col style="width:120px" />    <!-- 리뷰데이 -->
+                <col style="width:84px" />     <!-- 삭제 -->
+                <col style="width:0" />        <!-- 영어(지금 구조에선 영향 적음) -->
+              </colgroup>
 
-<table class="tbl">
-  <colgroup>
-    <col style="width:56px" />     <!-- # -->
-    <col />                        <!-- 한글(남는 폭 전부) -->
-    <col style="width:150px" />    <!-- 결과 -->
-    <col style="width:120px" />    <!-- 최종5회 -->
-    <col style="width:70px" />     <!-- 횟수 -->
-    <col style="width:120px" />    <!-- 리뷰데이 -->
-    <col style="width:84px" />     <!-- 삭제 -->
-    <col style="width:0" />        <!-- 영어(지금 구조에선 영향 적음) -->
-  </colgroup>
-
-  <tbody id="practiceBody"></tbody>
-</table>
-            
+              <!-- ✅ practiceBody도 1개만 -->
               <tbody id="practiceBody"></tbody>
             </table>
           </div>
@@ -144,7 +141,6 @@
           <div style="margin-top:10px; display:flex; justify-content:flex-start; padding-left:12px;">
             <button id="addRow" class="btn primary">+ 행 추가</button>
           </div>
-
         </div>
       </section>
     </main>

@@ -523,20 +523,41 @@ gap: 1px 10px; /* 14px → 10px (원하면 8px까지) */
 }
 
 /* === RIGHT COLUMNS SQUEEZE (paste at VERY BOTTOM) === */
-.tbl tbody{ gap: 8px !important; } /* 행 간격(원하면 1~10px) */
+/* === RIGHT COLUMNS SQUEEZE (PC only) === */
+@media (min-width: 921px){
+  .tbl tbody{ gap: 8px !important; }
 
-.tbl tr{
-  grid-template-columns:
-    36px   /* no */
-    1fr    /* ko */
-    110px  /* 결과 */
-    88px   /* 최종5회 */
-    44px   /* 횟수 */
-    84px   /* 리뷰데이 */
-    64px   /* 삭제 */
-    !important;
+  .tbl tr{
+    grid-template-columns:
+      36px   /* no */
+      1fr    /* ko */
+      110px  /* 결과 */
+      88px   /* 최종5회 */
+      44px   /* 횟수 */
+      84px   /* 리뷰데이 */
+      64px   /* 삭제 */
+      !important;
 
-  column-gap: 6px !important; /* 컬럼 사이 간격 */
+    column-gap: 6px !important;
+  }
+
+  .td-del{ padding-top: 6px !important; }
+
+  .tbl .chip-row{ gap: 4px !important; }
+  .tbl tr > td.td-result{ gap: 4px !important; }
+  .tbl tr > td.td-result::before{ margin-bottom: 1px !important; }
+  .tbl tr > td.td-result .chip{
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    padding: 0 !important;
+    font-size: 12px !important;
+  }
+
+  .td-history, .td-count, .td-day{
+    white-space: nowrap !important;
+    overflow: hidden !important;
+  }
 }
 
 /* 삭제칸 위 padding 줄여서 공간 덜 먹게 */
