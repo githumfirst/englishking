@@ -299,62 +299,61 @@ body{
   outline: none;
 }
 
-/* ===== Mobile: table row -> stacked card layout ===== */
-@media (max-width: 720px) {
-  .tbl thead {
-    display: none; /* 헤더 숨김(모바일에서는 카드형이 더 보기 좋음) */
-  }
-
-  .tbl,
-  .tbl tbody,
-  .tbl tr,
-  .tbl td {
-    display: block;
-    width: 100%;
-  }
-
-  .tbl tr {
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 14px;
-    padding: 12px;
-    margin: 12px 0;
-    background: rgba(255,255,255,0.03);
-  }
-
-  /* 번호 칸(#)은 작게 위에 */
-  .tbl .td-no {
-    font-weight: 700;
-    opacity: 0.8;
-    margin-bottom: 8px;
-  }
-
-  /* 한글/영어를 "섹션"처럼 */
-  .tbl td:nth-child(2)::before {
-    content: "한글 문장";
-    display: block;
-    font-size: 12px;
-    opacity: 0.7;
-    margin-bottom: 6px;
-  }
-
-  .tbl td:nth-child(3)::before {
-    content: "영어 문장";
-    display: block;
-    font-size: 12px;
-    opacity: 0.7;
-    margin: 10px 0 6px;
-  }
-
-  /* textarea가 폭을 다 쓰게 */
-  .tbl .cell-input {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  /* 결과/최종5회/횟수/리뷰데이/삭제는 아래쪽에 2열 그리드로 */
-  .tbl td:nth-child(n+4) {
-    margin-top: 10px;
-  }
+/* ===== All screens: table row -> stacked card layout ===== */
+.tbl thead {
+  display: none; /* 헤더 숨김: 카드형에서는 라벨을 각 칸에 붙임 */
 }
+
+.tbl,
+.tbl tbody,
+.tbl tr,
+.tbl td {
+  display: block;
+  width: 100%;
+}
+
+.tbl tr {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 12px;
+  margin: 12px 0;
+  background: rgba(255,255,255,0.03);
+}
+
+/* 번호(#) */
+.tbl .td-no {
+  font-weight: 700;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+/* 한글/영어 라벨 + 세로 배치 */
+.tbl td:nth-child(2)::before {
+  content: "한글 문장";
+  display: block;
+  font-size: 12px;
+  opacity: 0.7;
+  margin-bottom: 6px;
+}
+
+.tbl td:nth-child(3)::before {
+  content: "영어 문장";
+  display: block;
+  font-size: 12px;
+  opacity: 0.7;
+  margin: 10px 0 6px;
+}
+
+.tbl .cell-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 아래 정보들(결과/최종5회/횟수/리뷰데이/삭제) 간격 */
+.tbl td:nth-child(n+4) {
+  margin-top: 10px;
+}
+
+
 
 
