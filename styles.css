@@ -354,6 +354,60 @@ body{
   margin-top: 10px;
 }
 
+/* ===== Card layout: KO on top, toolbar row, EN below ===== */
+.tbl tr {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto auto auto; /* 한글은 넓게, 나머지는 auto */
+  grid-template-areas:
+    "no no no no no no"
+    "ko res hist cnt day del"
+    "en en en en en en";
+  gap: 10px 12px;
+  align-items: start;
+}
+
+/* 번호 */
+.tbl .td-no {
+  grid-area: no;
+  margin: 0;
+}
+
+/* KO/EN 칸을 grid 영역에 배치 (2번째, 3번째 td) */
+.tbl tr > td:nth-child(2) { grid-area: ko; }
+.tbl tr > td:nth-child(3) { grid-area: en; }
+
+/* 결과/최종5회/횟수/리뷰데이/삭제 (4~8번째 td) */
+.tbl tr > td:nth-child(4) { grid-area: res; }
+.tbl tr > td:nth-child(5) { grid-area: hist; }
+.tbl tr > td:nth-child(6) { grid-area: cnt; }
+.tbl tr > td:nth-child(7) { grid-area: day; }
+.tbl tr > td:nth-child(8) { grid-area: del; }
+
+/* 툴바 느낌: 가운데 정렬 + 줄바꿈 방지 */
+.tbl tr > td:nth-child(n+4) {
+  margin-top: 0;              /* 이전 카드 CSS에서 준 margin-top 제거 */
+  align-self: center;
+  white-space: nowrap;
+}
+
+/* 결과 버튼(ㅇ x △)을 한 줄로 */
+.tbl .td-result {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* 삭제 버튼 위치/크기 */
+.tbl tr > td:nth-child(8) .btn-danger {
+  padding: 8px 12px;
+}
+
+/* textarea는 폭 꽉 */
+.tbl .cell-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 
 
 
