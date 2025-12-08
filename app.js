@@ -85,8 +85,7 @@ async function updateRowToSupabase(appRow) {
     ko_text: appRow.ko ?? "",
     en_text: appRow.en ?? "",
     history: Array.isArray(appRow.history) ? appRow.history : [],
-    count: appRow.count ?? 0,
-    review_day: appRow.reviewDay ?? "",
+    count: appRow.count ?? 0,    
   };
 
   const { error } = await supa
@@ -721,6 +720,7 @@ supa.auth.onAuthStateChange(() => {
 initFromSession();
 
 });
+
 
 
 
