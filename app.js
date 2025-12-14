@@ -126,6 +126,62 @@ async function syncAllNosToSupabase() {
   if (error) console.error("syncAllNosToSupabase error:", error);
 }
 
+// -----------------------
+// Supabase <-> meta (settings)
+// ------------------------
+
+// 대시보드 날짜/목표 메타를 저장하는 테이블용
+async function loadMetaFromSupabase() {
+  const user = await getAuthedUser();
+  if (!user) return null;
+
+  const { data, error } = await supa
+    .from("settings")                // ⚠️ Supabase에서 만든 테이블 이름
+    .select("start, end, goal")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (error) {
+    console.error("loadMetaFromSupabase error:", error);
+    return null;
+  }
+  return data;
+}
+
+async function upsertMetaToSupabase(meta) {
+  const user = await getAuthedUser();
+  if (!user) throw new Error("로그인이 필요합니다.");
+
+  // 먼저 이 user_id로 settings가 이미 있는지 확인
+  const { data: existing, error: selError } = await supa
+    .from("settings")
+    .select("id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (selError) throw selError;
+
+  const payload = {
+    user_id: user.id,
+    start: meta.start,
+    end: meta.end,
+    goal: meta.goal,
+  };
+
+  if (existing) {
+    // 이미 있으면 update
+    const { error } = await supa
+      .from("settings")
+      .update(payload)
+      .eq("id", existing.id);
+    if (error) throw error;
+  } else {
+    // 없으면 insert
+    const { error } = await supa.from("settings").insert(payload);
+    if (error) throw error;
+  }
+}
+
 /* -----------------------
    State + Persistence
 ------------------------ */
@@ -299,18 +355,39 @@ function bindDashboard() {
     state.meta.title = e.target.value;
     saveState(); renderDashboard();
   });
-  $("#dashStart")?.addEventListener("change", (e) => {
+
+  $("#dashStart")?.addEventListener("change", async (e) => {
     state.meta.start = e.target.value;
-    saveState(); renderDashboard();
+    saveState();
+    renderDashboard();
+    try {
+      await upsertMetaToSupabase(state.meta);
+    } catch (err) {
+      console.error("dashStart DB error:", err);
+    }
   });
-  $("#dashEnd")?.addEventListener("change", (e) => {
+
+  $("#dashEnd")?.addEventListener("change", async (e) => {
     state.meta.end = e.target.value;
-    saveState(); renderDashboard();
+    saveState();
+    renderDashboard();
+    try {
+      await upsertMetaToSupabase(state.meta);
+    } catch (err) {
+      console.error("dashEnd DB error:", err);
+    }
   });
-  $("#dashGoal")?.addEventListener("input", (e) => {
+
+  $("#dashGoal")?.addEventListener("input", async (e) => {
     const n = Number(e.target.value);
     state.meta.goal = Number.isFinite(n) ? Math.max(0, Math.floor(n)) : 0;
-    saveState(); renderDashboard();
+    saveState();
+    renderDashboard();
+    try {
+      await upsertMetaToSupabase(state.meta);
+    } catch (err) {
+      console.error("dashGoal DB error:", err);
+    }
   });
 
   $("#gotoPractice")?.addEventListener("click", () => {
@@ -645,14 +722,24 @@ async function initFromSession() {
   const user = await getAuthedUser();
   if (!user) return;
 
+  // 1) 메타데이터(settings) 먼저 불러오기
+  const meta = await loadMetaFromSupabase();
+  if (meta) {
+    state.meta.start = meta.start ?? state.meta.start;
+    state.meta.end   = meta.end ?? state.meta.end;
+    state.meta.goal  = Number(meta.goal ?? state.meta.goal);
+  }
+
+  // 2) 문장 rows 불러오기
   const rows = await loadRowsFromSupabase();
   if (rows) {
     state.rows = rows;
-    renumberRows();
-    saveState();
-    renderPractice();
-    renderDashboard();
   }
+
+  renumberRows();
+  saveState();
+  renderPractice();
+  renderDashboard();
 }
 
 async function handleLogin() {
