@@ -323,10 +323,21 @@ function renderDashboard() {
   const cumTarget1 = Number(cumTarget.toFixed(1));
   const delta1 = Number((s.count - cumTarget1).toFixed(1));
   const sign = delta1 >= 0 ? "+" : "";
+  const targetPct = goal > 0 ? clamp((cumTarget / goal) * 100, 0, 100) : 0;
+
+  // daily 진행문장 및 달성율 진도율
+  const today = todayISO();
+  const todayDone = state.rows.filter(r => r.reviewDay === today).length;
+
+  const dailyTarget = daily; // 이미 위에서 daily 계산해둔 값(하루 목표)
+  const dailyPct = dailyTarget > 0 ? (todayDone / dailyTarget) * 100 : 0;
+
+  const cumPct = s.percent; // 누적 진도율은 이미 computeStats()가 만든 percent
 
   // marker (선택: 유지하고 싶으면)
   const markerEl = $("#todayMarker");
   if (markerEl) {
+    // 오늘까지 목표 진도율
     const markerPct = goal > 0 ? clamp((cumTarget / goal) * 100, 0, 100) : 0;
     markerEl.style.left = `${markerPct}%`;
   }
@@ -336,6 +347,7 @@ function renderDashboard() {
   const dailyEl = document.querySelector("#kpiDaily");
   const cumEl = document.querySelector("#kpiCumTarget");
   const doneEl = document.querySelector("#kpiDone");
+  const todayEl = document.querySelector("#kpiToday");
   const pctEl = document.querySelector("#kpiPercent");
   const deltaEl = document.querySelector("#kpiDelta");
 
@@ -343,6 +355,8 @@ function renderDashboard() {
   if (dailyEl) dailyEl.textContent = `${daily.toFixed(1)}문장`;
   if (cumEl) cumEl.textContent = `${cumTarget1.toFixed(1)}문장`;
   if (doneEl) doneEl.textContent = `${s.count}문장`;
+ if (todayEl) todayEl.textContent =
+  `${todayDone}문장 (일일 달성율: ${dailyPct.toFixed(1)}% / 누적 진도율: ${s.percent.toFixed(1)}% / 목표 진도율: ${targetPct.toFixed(1)}%)`;
   if (pctEl) pctEl.textContent = `${s.percent.toFixed(1)}%`;
 
   // ✅ “오늘까지 누계목표” 문장을 아래에 또 출력하지 않고,
